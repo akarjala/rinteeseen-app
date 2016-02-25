@@ -1,0 +1,17 @@
+{
+  "name"         : "rinteeseen-app",
+  "version"      : "0.0.1",
+  "description"  : "Ski slope reviewer",
+  "main"         : "server.js",
+  "author"       : "Aki Karjalainen",
+  "dependencies" : {
+    "express"         : "~4.13.4",
+    "mongoose"        : "~3.8.13",
+    "morgan"          : "~1.1.1",
+    "body-parser"     : "~1.4.3",
+    "method-override" : "~2.1.1",
+    "node-schedule"   : "~1.0.0",
+    "xml2js"          : "~0.4.16",
+    "moment"          : "~2.4.0"
+  }
+}
