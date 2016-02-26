@@ -13,19 +13,11 @@ function getPistes(res) {
   Piste.find(function (err, pistes) {
     if (err) {
       res.send(err);
-    }
-    console.log('Tee: ' + result.length);
-    // Find num of reviews per piste
-    for (var i=0; i<result.length; i++) {
-      Review.find( { "piste": ObjectId("result[i]._id") } ).count().exec(function(err, countresult) {
-      	if(err){ return next(err); }
-      	  result[i].reviewsTotal = countresult; console.log(countresult);
-      	});
-      };
-    });
+    };
+    res.json(pistes); //return all pistes in JSON format
+  });
+};
 
-    res.json(result); //return all pistes in JSON format
-  };
 
 
 
@@ -122,23 +114,11 @@ module.exports = function (app) {
     });
 
 
-    // Get only 1 piste, the one which was updated most recently.
-   app.get('/api/latestonepiste', function(req, res, next) {
-      console.log('API req: /api/latestonepiste');
-      //Piste.find(function(err, result) {
-      Piste.find({}).sort({'date':-1}).limit(1).exec(function(err, result) {
-        if(err){ return next(err); }
-        res.json(result);
-      });
-   }); 
-
-
-
    // create review and send back all reviews after creation
    app.post('/api/review', function (req, res) {
 	console.log('API req POST: /api/review');
 	console.log('post params: '+req.body._id+'--'+req.body.inputtext);
-        var reviewno = 5;
+        var reviewno = 3;
 	Review.create({         
           review: reviewno,
           comment: req.body.inputtext,

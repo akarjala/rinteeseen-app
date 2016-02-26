@@ -22,5 +22,3 @@ var reviewModule = angular.module('reviewServiceModule', [])
 
 
 
-
-

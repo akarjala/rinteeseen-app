@@ -1,14 +1,14 @@
 angular.module('updateServiceModule', [])
 
 
-	.factory('LatestOnePisteService', ['$http', function($http) { 
+	/* .factory('LatestOnePisteService', ['$http', function($http) { 
 	  return {
 	    get : function() {
 	      	console.log('Service: LatestonePisteService');
 	      	return $http.get('/api/latestonepiste');
 	      }
 	    }
-          }]);
+          }]); --> */
 
 	/* Could me more services in this service module
 	.factory('someService', ['$http',function($http) {

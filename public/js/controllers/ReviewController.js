@@ -18,27 +18,6 @@ angular.module('reviewController', [])
 			});
 
 
-		$scope.totalReviewsByPiste = function(reviews, pisteId) {
-		  console.log('Hitting Reviews.totalReviewsByPiste')
-		  var count = 0; var totalcount = 0;
-                  for (i=0; i<reviews.length; i++) {
-                    if (reviews[i].piste == pisteId) {
-                      totalcount++;
-      
-                      // Incremented total review count for this piste. Next see if review is today and increment today counter if it is.
-                      var today = new Date();
-
-                      if (Date.parse(reviews[i].date) < today) {
-                        count++;
-                      };                      
-                    };
-                  };
-                  $scope.totalbypiste = totalcount;
-                  $scope.totalbypistetoday = count;
-                };
-
-
-
 		// CREATE ==================================================================
 		// when submitting the add form, send the text to the node API
 		$scope.createReview = function(pisteId) {

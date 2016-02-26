@@ -31,13 +31,11 @@
 	<!-- SPELLS -->
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script><!-- load angular -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
-	<sciprt src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment-with-locales.js"></script><!-- moment.js for handling date/time-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment-with-locales.js"></script><!-- moment.js for handling date/time-->
 	<script src="js/controllers/pisteController.js"></script> <!-- load up our controllers -->
 	<script src="js/filters.js"></script><!-- load our filters -->
-	<script src="js/controllers/updateController.js"></script>
 	<script src="js/controllers/ReviewController.js"></script>
 	<script src="js/services/pisteService.js"></script> <!-- load our pistes service -->
-	<script src="js/services/updateService.js"></script><!-- load our update service -->
 	<script src="js/services/reviewService.js"></script><!-- load our review service -->
 	<script src="js/controllers/PistesDropDownController.js"></script><!-- load our navbar controller -->
 	<script src="js/controllers/AreasDropDownController.js"></script><!-- load our navbar controller -->
@@ -101,7 +99,7 @@
       </div>
 
 
-<div class="container">
+<div class="container" ng-controller="reviewController">
 
 <div class="wrap">
 
@@ -115,17 +113,17 @@
   </p>
 
 
-  <div class="panel panel-default" ng-controller="updateController">
+  <div class="panel panel-default">
   <div class="panel-body">
     <div class="text-info">
-      Rinteiden perustiedot päivitetty viimeksi <b>{{lastUpdatedPiste[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>15:4.2016 12:10</b>.
+      Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter }}</b>.
     </div>
 Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a> | <a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a>
   </div>
 </div>
 
 
-<div class="container" ng-controller="reviewController">
+<div class="container">
 
    <!-- LOOP OVER THE ITEMS IN $scope.pistes -->
    <!-- piste in pistes -->
@@ -139,39 +137,34 @@ Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rintee
 
 
 <!-- START LIST ITEM -->
-    {{totalReviewsByPiste(reviews, piste._id)}}
     {{totalReviewsByPisteToday(reviews, piste._id)}}
     <div id="{{piste._id}}" class="list-group">
       <a href="#" class="list-group-item active" ng-if="piste.status!=='94'">
-	<h4 class="list-group-item-heading"><img ng-src="images/ok.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{ piste.status }})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="background-color: #999999; color: white"> Arvioita tänään: <b>{{totalbypistetoday}}/{{totalbypiste}} </b></span>
+	<h4 class="list-group-item-heading"><img ng-src="images/ok.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{ piste.status }})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="background-color: #999999; color: white"> Arvioita tänään: <b>{{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </b></span>
       </a>
       <a href="#" class="list-group-item" style="background-color: #992600; color:" ng-if="piste.status=='94'">
-	<h4 class="list-group-item-heading" style="color: white"><img ng-src="images/stop.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{piste.status}})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="padding: 3px 3px;" > Arvioita tänään: {{totalbypistetoday}}/{{totalbypiste}} </span>
+	<h4 class="list-group-item-heading" style="color: white"><img ng-src="images/stop.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{piste.status}})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="padding: 3px 3px;" > Arvioita tänään: {{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </span>
       </a>
       
       <div class="panel panel-default">
-        <div class="panel-body">
-Arvioiden keskiarvo tänään: <img src="images/0.png" class="Smileys">
 
-          <div class="btn-group">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Viimeisin kommentti 10.41: Ihan jees oli! <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="#">Aiempia kommentteja</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">10:39: Paska kunto.</a></li>
-              <li><a href="#">09:30: Tykättiin. Lorep ipsum foo bar jooooopa jooo. </a></li>
-            </ul>
-          </div>
-        </div>
+	<div class="panel-body">
+	  Arvioiden keskiarvo tänään: 
+	  <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="Smileys">
+Kommentteja tänään: 
+
+<span ng-repeat="review in reviews | reviewsToday | filter:{piste: piste._id} | limitTo: 5 | orderBy: '-date'">
+  <b>{{review.date | extractTimeFromDate}}:</b> "{{review.comment}}"
+</span>
+	</div> 
+
         <div class="panel-footer">
           <div class="btn-group" style="padding-bottom: 6px;" role="group" aria-label="">
-<button type="button" class="btn btn-default"><img src="images/1.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/2.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/3.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/4.png" class="Smileys"></button>
 <button type="button" class="btn btn-default"><img src="images/5.png" class="Smileys"></button>
+<button type="button" class="btn btn-default"><img src="images/4.png" class="Smileys"></button>
+<button type="button" class="btn btn-default"><img src="images/3.png" class="Smileys"></button>
+<button type="button" class="btn btn-default"><img src="images/2.png" class="Smileys"></button>
+<button type="button" class="btn btn-default"><img src="images/1.png" class="Smileys"></button>
           </div>
           <form class="form-inline" role="form">
             <div class="form-group">
@@ -200,12 +193,7 @@ Arvioiden keskiarvo tänään: <img src="images/0.png" class="Smileys">
 
 
 
-
-
-
-
 <div class="jumbotron">
-
 
 
 		<!-- TODO LIST -->
