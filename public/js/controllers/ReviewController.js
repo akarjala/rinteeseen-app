@@ -8,7 +8,6 @@ angular.module('reviewController', [])
 
 		// GET =====================================================================
 		// when landing on the page, get all pistes and show them
-		// use the service to get all the todos
 		Reviews.get()
 			.success(function(data) {
 			        console.log('Hitting Reviews.get');

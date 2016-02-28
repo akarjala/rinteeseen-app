@@ -10,7 +10,6 @@ angular.module('pisteController', [])
 
 		// GET =====================================================================
 		// when landing on the page, get all pistes and show them
-		// use the service to get all the todos
 		Pistes.get()
 			.success(function(data) {
 			        console.log('Hitting Pistes.get');

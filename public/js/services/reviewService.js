@@ -13,9 +13,6 @@ var reviewModule = angular.module('reviewServiceModule', [])
 			  	// Add piste _id to data so that we know to which piste the review is referring
 			  	reviewForm._id = pisteId;
 				return $http.post('/api/review', reviewForm);
-			},
-			delete : function(id) {
-				return $http.delete('/api/todos/' + id);
 			}
 		}
 	}]);

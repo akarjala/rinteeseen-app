@@ -4,11 +4,8 @@ var app = express(); 						// create our app w/ express
 var mongoose = require('mongoose'); 				// mongoose for mongodb
 // For development.
 //var port = process.env.PORT || 8080; 				// set the port
-// For redhat openshift
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
-// For redhat opnenshift
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
-//var database = require('./config/database'); 			// load the database config
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -19,6 +16,7 @@ var methodOverride = require('method-override');
 
 // default to a 'localhost' configuration:
 var connection_string = 'mongodb://127.0.0.1:27017/rinteeseenapp';
+
 // if OPENSHIFT env variables are present, use the available connection info so that we can connect to openshift mongo instance.
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 	connection_string = "mongodb://" + 
@@ -32,7 +30,6 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 console.log('Connecting to Mongodb '+connection_string);
 
 mongoose.connect(connection_string); 	// Connect to mongodb
-
 
 
 app.use(express.static(__dirname + '/public')); 		// set the static files location /public/img will be /img for users
@@ -57,7 +54,7 @@ setInterval(function() {
 	var http = require('http');
 
 	var options = {
-		host: 'localhost',
+		host: server_ip_address,
 		path: '/api/updatepistedata_levi',
 	    port: port
 	};
@@ -87,7 +84,7 @@ setInterval(function() {
     var http = require('http');
 
     var options = {
-        host: 'localhost',
+        host: server_ip_address,
         path: '/api/updatepistedata_yllas',
         port: port
     };
