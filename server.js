@@ -2,7 +2,12 @@
 var express = require('express');
 var app = express(); 						// create our app w/ express
 var mongoose = require('mongoose'); 				// mongoose for mongodb
-var port = process.env.PORT || 80; 				// set the port
+// For development.
+//var port = process.env.PORT || 8080; 				// set the port
+// For redhat openshift
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+// For redhat opnenshift
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 var database = require('./config/database'); 			// load the database config
 //var pistedata_levi = require('./config/pistedata_levi');	// load pistedata providers config
 var morgan = require('morgan');
@@ -93,10 +98,10 @@ setInterval(function() {
 
 
 // listen (start app with node server.js) ======================================
-app.listen(port);
-console.log("App listening on port " + port);
 
-
+app.listen(port, server_ip_address, function () {
+		  console.log( "Listening on " + server_ip_address + ", port " + port )
+});
 
 
 
