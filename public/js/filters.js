@@ -31,8 +31,11 @@ var myfilter = angular.module('rinteeseenFilters', [])
 
         myfilter.filter('dateFormatter', function() {
           return function(input) {
-            var date = new Date(input);
-            var output = date.toLocaleString();
+			var output = '';
+			if (input != undefined) {
+            	var date = new Date(input);
+            	var output = date.toLocaleString();
+			}
             return output;
           };
         });
@@ -44,6 +47,15 @@ var myfilter = angular.module('rinteeseenFilters', [])
             return output;
           };
         });
+
+        myfilter.filter('reviewSummaryFormatter', function() {
+          return function(input) {
+            if (input == '') {
+				return 'Ei vielä arvioita.';
+			} else { return input };
+          };
+        });
+
 
 
 	// Input array of objects. You get back array with objects where date is today

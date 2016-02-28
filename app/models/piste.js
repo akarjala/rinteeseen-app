@@ -14,6 +14,7 @@ var pisteSchema = new Schema({
   difficulty : String,
   length     : String,
   hidden     : Boolean,
+  extrainfo  : String,
   reviews    : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });
 

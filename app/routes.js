@@ -6,11 +6,12 @@
 var Piste = require('./models/piste');
 var Review = require('./models/review');
 var Updatepistedata = require('./models/updatepistedata');
-var Updatepistedataconfig = require('../config/pistedata_levi'); 
+var Updatepistedataconfig_levi = require('../config/pistedata_levi'); 
+var Updatepistedataconfig_yllas = require('../config/pistedata_yllas');
 
 
 function getPistes(res) {
-  Piste.find(function (err, pistes) {
+  Piste.find().sort({name: -1}).exec( function (err, pistes) {
     if (err) {
       res.send(err);
     };
@@ -78,12 +79,8 @@ module.exports = function (app) {
     }); */
 
 
-// 
-// Areas and update timestamps
-// GET /pistes
-// PUT /reviews/:id upvote and comment
-// Update pistes
-// GET /updatepistedata
+
+
 
 
   app.get('/api/pistes', function(req, res, next) {
@@ -103,26 +100,90 @@ module.exports = function (app) {
     });
 
 
-    app.get('/api/updatepistedata', function(req, res, next) {
-      Updatepistedata.getJSON(Updatepistedataconfig,
-        function(statusCode, result)
+
+	app.get('/api/updatepistedata_levi', function(req, res, next) {
+		Updatepistedata.updateLevi(Updatepistedataconfig_levi,
+		function(statusCode, result)
         {
-          //console.log("onResult: (" + statusCode + ")" + JSON.stringify(result));
-          res.statuscode = statusCode;
-          res.json(result);
-        });
+			//console.log("onResult: (" + statusCode + ")" + JSON.stringify(result));
+			res.statuscode = statusCode;
+
+            result.forEach(function(piste) {
+                var p = ({
+                        country : piste.country,
+                        area : piste.area,
+                        name : piste.name,
+                        date : piste.date,
+                        status : piste.status,
+                        difficulty : piste.difficulty,
+                        length : piste.length,
+                        hidden : piste.hidden,
+						extrainfo : piste.extrainfo,
+                });
+
+                Piste.findOneAndUpdate({name: p.name}, p, {upsert: true}).exec(function(err, doc) {
+					if (err) {
+						   console.log(err);	
+						   	return (err); }
+					console.log('Successfully upsert: ' + p.area + ', ' + p.name);
+				});
+
+
+            });
+
+			res.json(result);
+		});
+
     });
 
 
-   // create review and send back all reviews after creation
-   app.post('/api/review', function (req, res) {
+	app.get('/api/updatepistedata_yllas', function(req, res, next) {
+		Updatepistedata.updateYllas(Updatepistedataconfig_yllas,
+		function(statusCode, result)
+        {
+			//console.log("onResult: (" + statusCode + ")" + JSON.stringify(result))
+            res.statuscode = statusCode;
+			
+            result.forEach(function(piste) {
+                var p = ({
+                        country : piste.country,
+                        area : piste.area,
+                        name : piste.name,
+                        date : piste.date,
+                        status : piste.status,
+                        difficulty : piste.difficulty,
+                        length : piste.length,
+                        hidden : piste.hidden,
+						extrainfo : piste.extrainfo
+                });
+
+                Piste.findOneAndUpdate({name: p.name}, p, {upsert: true}).exec(function(err, doc) {
+                    if (err) {
+                           console.log(err);
+                            return (err); }
+                    console.log('Successfully upsert: ' + p.area + ', ' + p.name);
+                });
+
+
+            });
+
+			res.json(result);
+		});
+
+    });
+
+
+
+	// create review and send back all reviews after creation
+	app.post('/api/review', function (req, res) {
 	console.log('API req POST: /api/review');
 	console.log('post params: '+req.body._id+'--'+req.body.inputtext);
-        var reviewno = 3;
-	Review.create({         
-          review: reviewno,
-          comment: req.body.inputtext,
-          piste: req.body._id
+	
+	Review.create({
+    area: req.body.area,			
+	review: req.body.reviewno,
+	comment: req.body.inputtext,
+    piste: req.body._id
         }, function (err, review) {
           if (err) { return res.send(err); }
 
@@ -130,7 +191,28 @@ module.exports = function (app) {
           getPistes(res);
         });
       });
-   
+
+
+
+
+
+	// create review and send back all reviews after creation
+	app.post('/api/review', function (req, res) {
+	console.log('API req POST: /api/review');
+	console.log('post params: '+req.body._id+'--'+req.body.inputtext);
+	
+	Review.create({
+    area: req.body.area,			
+	review: req.body.reviewno,
+	comment: req.body.inputtext,
+    piste: req.body._id
+        }, function (err, review) {
+          if (err) { return res.send(err); }
+
+          // get and return all the reviews after you create another
+          getPistes(res);
+        });
+      });
 
 
 

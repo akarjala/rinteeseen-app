@@ -8,10 +8,11 @@ var Schema = mongoose.Schema;
 // Date is timestamp when review was added.
 
 var reviewSchema = new Schema({
-  review    : Number,
-  comment   : String,
-  date      : { type: Date, default: Date.now },
-  piste: { type: mongoose.Schema.Types.ObjectId, ref: 'Piste' }
+	area      : String,
+	review    : Number,
+	comment   : { type: String, max: 100 },
+	date      : { type: Date, default: Date.now },
+	piste: { type: mongoose.Schema.Types.ObjectId, ref: 'Piste' }
 });
 
 

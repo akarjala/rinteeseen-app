@@ -38,7 +38,6 @@
 	<script src="js/services/pisteService.js"></script> <!-- load our pistes service -->
 	<script src="js/services/reviewService.js"></script><!-- load our review service -->
 	<script src="js/controllers/PistesDropDownController.js"></script><!-- load our navbar controller -->
-	<script src="js/controllers/AreasDropDownController.js"></script><!-- load our navbar controller -->
 	<script src="js/core.js"></script> <!-- load our main application -->
 
 </head>
@@ -64,17 +63,17 @@
               <li><a href="#contact">Ota yhteyttä</a></li>
 
               <li class="dropdown">
-              <div ng-controller="AreasDropDownController">
+              <div>
                 <div class="dropdown" style="padding-top: 10px; padding-left: 5px">
                   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Hiihtokeskus
+                    Hiihtokeskus {{piste.area}}
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li n g-repeat="piste in pistes"><a href="?levi" ng-click="dropboxitemselected(piste.name)">Levi</a></li>
-                    <li><a href="?yllas" ng-click="dropboxitemselected('yllas')">Ylläs</a></li>
-                  </ul>
+					<li ng-repeat="area in areas"><a href="#" ng-click="areaSelected(area.name)">{{area.name}}</a></li>
+			</ul>
                 </div>
+
               </div>
               </li>
 
@@ -86,8 +85,8 @@
                     Rinteet
                     <span class="caret"></span>
                   </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		    <li ng-repeat="piste in pistes"><a href="#{{piste._id}}" ng-click="dropboxitemselected(piste.name)"><img ng-src="./images/{{piste.status | pisteStatusImageFormatter}}" width="15px"> {{piste.name}} ({{piste.status | pisteStatusFormatter}})</a></li>
+				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						  <li ng-repeat="piste in pistes | orderBy: 'piste.name' | filter: {area: areaFilter}"><a href="#{{piste._id}}" ng-click="dropboxitemselected(piste.name)"><img ng-src="./images/{{piste.status | pisteStatusImageFormatter}}" width="15px"> {{piste.name}} ({{piste.status | pisteStatusFormatter}})</a></li>
                   </ul>
                 </div>
               </div>
@@ -105,7 +104,7 @@
 
   <div id="about" class="well text-center">
     <p>Etsitkö täydellistä rinnettä? Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Voit myös kirjoittaa arviosi yhteyteen lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
-    <p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista.</p>
+    <p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista. Tieto on siis jatkuvasti ajan tasalla ja voit seurata palvelusta vaikkapa vain aukiolotietoja.</p>
   </div>
   
   <p class="text-center" ng-show="loading">
@@ -116,7 +115,7 @@
   <div class="panel panel-default">
   <div class="panel-body">
     <div class="text-info">
-      Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter }}</b>.
+			<b><font size="+3">{{areaFilter}}</font></b><br>Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilter} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
     </div>
 Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a> | <a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a>
   </div>
@@ -133,14 +132,14 @@ Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rintee
 
 <!-- <div class="item" ng-repeat="piste in pistes track by $index">
 -->
-<div class="item" ng-repeat="piste in pistes track by $index">
+<div class="item" ng-repeat="piste in pistes | filter: {area: areaFilter} track by $index | filter: {area: areaFilter}">
 
 
 <!-- START LIST ITEM -->
     {{totalReviewsByPisteToday(reviews, piste._id)}}
     <div id="{{piste._id}}" class="list-group">
       <a href="#" class="list-group-item active" ng-if="piste.status!=='94'">
-	<h4 class="list-group-item-heading"><img ng-src="images/ok.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{ piste.status }})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="background-color: #999999; color: white"> Arvioita tänään: <b>{{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </b></span>
+			  <h4 class="list-group-item-heading"><img ng-src="images/ok.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{ piste.status }})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. Lisätiedot: "{{piste.extrainfo}}". </font></h4><span class="badge" style="background-color: #999999; color: white"> Arvioita tänään: <b>{{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </b></span>
       </a>
       <a href="#" class="list-group-item" style="background-color: #992600; color:" ng-if="piste.status=='94'">
 	<h4 class="list-group-item-heading" style="color: white"><img ng-src="images/stop.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{piste.status}})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="padding: 3px 3px;" > Arvioita tänään: {{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </span>
@@ -193,50 +192,21 @@ Kommentteja tänään:
 
 
 
-<div class="jumbotron">
+<div id="contact" class="jumbotron">
 
-
-		<!-- TODO LIST -->
-		<div id="todo-list" class="row">
-			<div class="col-sm-4 col-sm-offset-4">
-
-				
-
-				<!-- LOOP OVER THE TODOS IN $scope.todos -->
-				<div> <!--class="checkbox" ds="to do in t odos"-->
-					<label>
-						<input type="checkbox" ng-click="deleteTodo(todo._id)">  todo.texti 
-					</label>
-				</div>
-
-			</div>
+		<div id="contact" class="well text-center text-muted">
+			<p>Rinteeseen by Aki. Palvelulla ei ole mitään yhteyttä minkään hiihtokeskuksen toimintaa pyörittävään yritykseen.</p>
+			<p>Contact me by dialing or texting 358400992040 and yes it does include a three digit country code...</p>
 		</div>
-
-		<!-- FORM TO CREATE TODOS -->
-		<div id="todo-form" class="row">
-			<div class="col-sm-8 col-sm-offset-2 text-center">
-				<form>
-					<div class="form-group">
-
-						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-						<input type="text" class="form-control input-lg text-center" placeholder="Kommentti" ng-model="formData.text">
-					</div>
-
-					<!-- createToDo() WILL CREATE NEW TODOS -->
-					<button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
-				</form>
-			</div>
-		</div>
-</div>
-
-
-
-                <div id="contact" class="well text-center text-muted">
-			<p>Rinteeseen by Aki Karjalainen. Palvelulla ei ole mitään yhteyttä minkään hiihtokeskuksen toimintaa pyörittävään yritykseen.</p>
-			<p>Follow at <a href="http://twitter.com/"> @akarjala2.</a>.</p>
+		<div align="center">
+			<img src="images/nodejs-new-pantone-black.png" height="50px" style="padding-right: 5px">
+			<img src="images/mongodb.png" height="50px" style="padding-right: 5px">
+			<img src="images/express.png" height="50px" style="padding-right: 5px">
+			<img src="images/angularjs.png" height="50px">
 		</div>
 
 </div>
+
 
  <!-- Bootstrap core JavaScript
     ================================================== -->

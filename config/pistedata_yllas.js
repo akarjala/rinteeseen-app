@@ -1,7 +1,7 @@
 module.exports = {
-  host: 'ski2.intermaps.com',
+  host: 'www.panoraama.com',
   port: 80,
-  path: '/levi/get_data.asp?link=http://sdds4.intermaps.com/sdds4_db_xml/default.aspx?region_id=3896',
+  path: '/yllas/huolto/yllaski_scripti.js',
   method: 'GET',
   headers: {
     'Content-Type': 'text/plain'

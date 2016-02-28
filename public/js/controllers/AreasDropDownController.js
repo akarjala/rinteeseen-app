@@ -1,12 +1,22 @@
 angular.module('AreasDropDownControllerModule', [])
-
+/*
   .controller('AreasDropDownController', function ($scope) {
+
+    $scope.areas = [ {
+		name: 'Levi'
+	},
+	{
+		name: 'Ylläs'
+	}];
+
+
+	$scope.areaFilter = '';
+
  
-    $scope.areasDropDown = ['Math', 'Physics', 'Chemistry', 'Hindi', 'English'];
- 
-    $scope.dropboxitemselected = function ($areaName) {
+    $scope.areaSelected = function ($areaName) {
         console.log("drop box item selected:" + $areaName);
-    }
+		$scope.areaFilter = $areaName;
+    };
 });
 
- 
+ */
