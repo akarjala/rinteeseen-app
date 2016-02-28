@@ -8,15 +8,23 @@ var mongoose = require('mongoose'); 				// mongoose for mongodb
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 // For redhat opnenshift
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
-var database = require('./config/database'); 			// load the database config
-//var pistedata_levi = require('./config/pistedata_levi');	// load pistedata providers config
+//var database = require('./config/database'); 			// load the database config
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
 
 // configuration ===============================================================
-mongoose.connect(database.localUrl); 	// Connect to local MongoDB instance. A remoteUrl is also available (modulus.io)
+//provide a sensible default for local development
+mongodb_connection_string = 'mongodb://127.0.0.1:27017/rinteeseenapp';
+//take advantage of openshift env vars when available:
+if(process.env.OPENSHIFT_MONGODB_DB_URL){
+	mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + 'rinteeseenapp';
+};
+
+
+
+mongoose.connect(mongodb_connection_string); 	// Connect to local MongoDB instance. A remoteUrl is also available (modulus.io)
 
 
 
