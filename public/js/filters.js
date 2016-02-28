@@ -51,7 +51,7 @@ var myfilter = angular.module('rinteeseenFilters', [])
         myfilter.filter('reviewSummaryFormatter', function() {
           return function(input) {
             if (input == '') {
-				return 'Ei vielä arvioita.';
+				return 'Ei vielä arvioita';
 			} else { return input };
           };
         });
