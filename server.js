@@ -28,6 +28,8 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 	process.env.OPENSHIFT_APP_NAME;
 };
 
+console.log('Connecting to Mongodb '+connection_string);
+
 mongoose.connect(connection_string); 	// Connect to mongodb
 
 
