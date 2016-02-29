@@ -11,8 +11,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
 
-	<title>Rinteeseen arviot, rinne tiedot, rinteiden aukiolojat, hissit. Levi ja Ylläs./title>
-			<meta name="description" content="Reaaliaikaiset rinnetiedot, hissit, aukiolojat, arvostelut. Arvostele rinteitä. Levi, Ylläs ja lisää tulossa.">
+	<title>Rinteeseen.com. Arviot, rinteiden tiedot, rinteiden aukiolojat, hissit reaaliaikset tiedot. Levi ja Ylläs.
+	</title>
+			<meta name="description" content="Reaaliaikaiset rinnetiedot aukiolotietoineen, hissit, arvostelut. Arvostele rinteitä. Levi, Ylläs ja lisää tulossa. Katso aukioloajat, vaikeustasot, pituudet ja arvostele rinteen kunto helposti klikkaamalla hymiötä.">
 
 	<!-- SCROLLS -->
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"><!-- load bootstrap -->
@@ -22,8 +23,8 @@
 		html 					{ overflow-y:scroll; }
 		body 					{ padding-top: 0px; }
 		body 
-                #vendorpisteinfo                        { font-size: 70%; }
-                .Smileys                            { width: 25px; height: 25px; }
+		#vendorpisteinfo		{ font-size: 70%; }
+		.Smileys				{ width: 25px; height: 25px; }
 
 
 	</style>
@@ -100,26 +101,26 @@
 
 <div class="container" ng-controller="reviewController">
 
-<div class="wrap">
+	<div class="wrap">
 
-  <div id="about" class="well text-center">
-    <p>Etsitkö täydellistä rinnettä? Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Voit myös kirjoittaa arviosi yhteyteen lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
-    <p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista. Tieto on siis jatkuvasti ajan tasalla ja voit seurata palvelusta vaikkapa vain aukiolotietoja.</p>
-  </div>
+		<div id="about" class="well text-center">
+			<p>Etsitkö täydellistä rinnettä? Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Voit myös kirjoittaa arviosi yhteyteen lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
+    	<p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista. Tieto on siis jatkuvasti ajan tasalla ja voit seurata palvelusta vaikkapa vain aukiolotietoja.</p>
+		</div>
   
-  <p class="text-center" ng-show="loading">
-    <span class="fa fa-spinner fa-spin fa-5x"></span>
-  </p>
+		<p class="text-center" ng-show="loading">
+		<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</p>
 
 
-  <div class="panel panel-default">
-  <div class="panel-body">
-    <div class="text-info">
-			<b><font size="+3">{{areaFilter}}</font></b><br>Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilter} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="text-info">
+<b><font size="+3">{{areaFilter}}</font></b><br>Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilter} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
     </div>
 Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a> | <a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a>
-  </div>
-</div>
+				</div>
+			</div>
 
 
 <div class="container">
@@ -152,22 +153,25 @@ Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rintee
 	  <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="Smileys">
 Kommentteja tänään: 
 
-<span ng-repeat="review in reviews | reviewsToday | filter:{piste: piste._id} | limitTo: 5 | orderBy: '-date'">
+<span ng-repeat="review in reviews | reviewsToday | filter:{piste: piste._id} | limitTo: '-5' | orderBy: '-date'"> 
+
   <b>{{review.date | extractTimeFromDate}}:</b> "{{review.comment}}"
 </span>
 	</div> 
+		<form class="form-inline" role="form">
+		<div class="form-group">
+			<label class="sr-only" form="reviewForm">{{piste._id}}</label>
 
-        <div class="panel-footer">
-          <div class="btn-group" style="padding-bottom: 6px;" role="group" aria-label="">
-<button type="button" class="btn btn-default"><img src="images/5.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/4.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/3.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/2.png" class="Smileys"></button>
-<button type="button" class="btn btn-default"><img src="images/1.png" class="Smileys"></button>
+			<div class="panel-footer">
+				<div class="btn-group" style="padding-top: 6px;" role="group" aria-label="">
+<label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'5'" uncheckable><img src="images/5.png" class="Smileys"></label>
+<label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'4'" uncheckable><img src="images/4.png" class="Smileys"></label>
+<label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'3'" uncheckable><img src="images/3.png" class="Smileys"></label>
+<label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'2'" uncheckable><img src="images/2.png" class="Smileys"></label>
+<label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'1'" uncheckable><img src="images/1.png" class="Smileys"></label>
+				</div>
           </div>
-          <form class="form-inline" role="form">
-            <div class="form-group">
-	      <label class="sr-only" form="reviewForm">{{piste._id}}</label>
+
 
         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
 
@@ -175,10 +179,11 @@ Kommentteja tänään:
                 <div class="col-md-8">
                   <div class="input-group">
                     <span class="input-group-btn">
-		      <button class="btn btn-primary" type="submit" ng-click="createReview(piste._id)">Lähetä {{piste._id}}</button>
+		      <button class="btn btn-primary" type="submit" ng-click="createReview(areaFilter, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Lähetä {{piste._id}}</button>
                     </span>
-		    <input type="text" name="{{piste._id}}" class="form-control input text-center" placeholder="Vapaa kommentti" ng-model="pistes[$index].comment" maxlength="50">
+		    <input type="text" name="{{piste._id}}" class="form-control input text-center" placeholder="Kommentoi tähän!" ng-model="pistes[$index].comment" maxlength="50">
                   </div><!-- /input-group -->
+				  <div class="alert alert-danger" role="alert" ng-show="submitError !== ''">Virhe: Valitse hymiö ennen lähettämistä!</div> 
                 </div><!-- /.col-lg-6 -->
               </div>
             </form>
@@ -195,8 +200,8 @@ Kommentteja tänään:
 <div id="contact" class="jumbotron">
 
                 <div id="contact" class="well text-center text-muted">
-                        <p>Rinteeseen by Aki. Tein tämän koska 1. tarvitsin tällaista ja uskon, että joku muukin ja 2. koska pystyin. Ei mitään yhteyttä minkään hiihtokeskuksen toimintaan tai yritykseen.</p>
-                        <p>Yhteydet soittamalla tai tekstaamalla 358400992040 ja kyllä siinä on maakoodi mukana... Ei spostiosoitetta, koska spam sucks.</p>
+                        <p>Rinteeseen by Aki. Tein tämän koska 1. tarvitsin tällaista ja uskon, että joku muukin sekä 2. koska pystyin. Ei mitään yhteyttä minkään hiihtokeskuksen toimintaan tai yritykseen.</p>
+                        <p>Yhteydet soittamalla tai tekstaamalla 358400992040 ja kyllä. siinä on maakoodi mukana... Ei spostiosoitetta, koska spam sucks.</p>
                         <p>Contact me by dialing or texting 358400992040 and yes it does include a three digit country code... No electronic mail address here as I do not want spam.</p>
                         <p>Tech stack notes: OpenShift, AWS, Node.JS, MongoDB, Mongoose, Angular, REST/JSON API's jne. cool stuff.</p>
                 </div>
@@ -207,6 +212,7 @@ Kommentteja tänään:
 			<img src="images/express.png" height="30px" style="padding-right: 5px">
 			<img src="images/angularjs.png" height="50px">
 			<img src="images/nodejs-new-pantone-black.png" height="50px" style="padding-right: 5px">
+			<br>
 		</div>
 
 </div>

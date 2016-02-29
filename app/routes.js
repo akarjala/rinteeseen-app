@@ -17,6 +17,17 @@ function getPistes(res) {
   });
 };
 
+function getReviews(res) {
+	Review.find( function (err, reviews) {
+		if (err) {
+			res.send(err);
+		};
+		res.json(reviews); // return all reviews in JSON format
+
+	});
+};
+
+
 
 
 
@@ -145,40 +156,17 @@ module.exports = function (app) {
 	// create review and send back all reviews after creation
 	app.post('/api/review', function (req, res) {
 	console.log('API req POST: /api/review');
-	console.log('post params: '+req.body._id+'--'+req.body.inputtext);
+	console.log('post params: '+req.body.area+req.body.pisteId+'--'+req.body.comment);
 	
 	Review.create({
-    area: req.body.area,			
-	review: req.body.reviewno,
-	comment: req.body.inputtext,
-    piste: req.body._id
+ 		area: req.body.area,			
+		review: req.body.reviewno,
+		comment: req.body.comment,
+		piste: req.body.pisteId,
         }, function (err, review) {
           if (err) { return res.send(err); }
-
           // get and return all the reviews after you create another
-          getPistes(res);
-        });
-      });
-
-
-
-
-
-	// create review and send back all reviews after creation
-	app.post('/api/review', function (req, res) {
-	console.log('API req POST: /api/review');
-	console.log('post params: '+req.body._id+'--'+req.body.inputtext);
-	
-	Review.create({
-    area: req.body.area,			
-	review: req.body.reviewno,
-	comment: req.body.inputtext,
-    piste: req.body._id
-        }, function (err, review) {
-          if (err) { return res.send(err); }
-
-          // get and return all the reviews after you create another
-          getPistes(res);
+          getReviews(res);
         });
       });
 

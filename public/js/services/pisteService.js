@@ -18,6 +18,3 @@ var pisteModule = angular.module('pisteServiceModule', [])
 	}]);
 
 
-
-
-

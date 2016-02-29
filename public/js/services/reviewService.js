@@ -8,11 +8,9 @@ var reviewModule = angular.module('reviewServiceModule', [])
 			        console.log('reviewService get');
 				return $http.get('/api/review');
 			},
-			createReview : function(reviewForm, pisteId) {
+			createReview : function(newreviewData) {
 			  	console.log('reviewService create');
-			  	// Add piste _id to data so that we know to which piste the review is referring
-			  	reviewForm._id = pisteId;
-				return $http.post('/api/review', reviewForm);
+				return $http.post('/api/review', newreviewData);
 			}
 		}
 	}]);

@@ -12,6 +12,8 @@ var reviewSchema = new Schema({
 	review    : Number,
 	comment   : { type: String, max: 100 },
 	date      : { type: Date, default: Date.now },
+	internaldate : { type: Date, default: Date.now },
+	internal  : String,
 	piste: { type: mongoose.Schema.Types.ObjectId, ref: 'Piste' }
 });
 
