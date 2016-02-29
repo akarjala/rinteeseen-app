@@ -25,6 +25,7 @@
 		body 
 		#vendorpisteinfo		{ font-size: 70%; }
 		.Smileys				{ width: 25px; height: 25px; }
+		.SmileysAverage			{ width: 35px; height: 35px; }
 
 
 	</style>
@@ -150,7 +151,7 @@ Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rintee
 
 	<div class="panel-body">
 	  Arvioiden keskiarvo tänään: 
-	  <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="Smileys">
+	  <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="SmileysAverage">
 Kommentteja tänään: 
 
 <span ng-repeat="review in reviews | reviewsToday | filter:{piste: piste._id} | limitTo: '-5' | orderBy: '-date'"> 
@@ -179,7 +180,7 @@ Kommentteja tänään:
                 <div class="col-md-8">
                   <div class="input-group">
                     <span class="input-group-btn">
-		      <button class="btn btn-primary" type="submit" ng-click="createReview(areaFilter, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Lähetä {{piste._id}}</button>
+		      <button class="btn btn-primary" type="submit" ng-click="createReview(areaFilter, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Lähetä!</button>
                     </span>
 		    <input type="text" name="{{piste._id}}" class="form-control input text-center" placeholder="Kommentoi tähän!" ng-model="pistes[$index].comment" maxlength="50">
                   </div><!-- /input-group -->
