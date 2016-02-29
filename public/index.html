@@ -46,6 +46,8 @@
 	<script src="js/controllers/PistesDropDownController.js"></script><!-- load our navbar controller -->
 	<script src="js/core.js"></script> <!-- load our main application -->
 
+
+
 </head>
 <!-- SET THE CONTROLLER -->
 <body ng-controller="mainController">
@@ -184,7 +186,7 @@ Kommentteja tänään:
                 <div class="col-md-8">
                   <div class="input-group">
                     <span class="input-group-btn">
-		      <button class="btn btn-primary" type="submit" ng-click="createReview(areaFilter, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Lähetä!</button>
+						<button class="btn btn-primary" type="submit" ng-click="createReview(areaFilter, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Valitse hymiö ja lähetä!				</button>
                     </span>
 		    <input type="text" name="{{piste._id}}" class="form-control input text-center" placeholder="Kommentoi tähän!" ng-model="pistes[$index].comment" maxlength="50">
                   </div><!-- /input-group -->
@@ -206,9 +208,9 @@ Kommentteja tänään:
 
                 <div id="contact" class="well text-center text-muted">
                         <p>Rinteeseen by Aki. Tein tämän koska 1. tarvitsin tällaista ja uskon, että joku muukin sekä 2. koska pystyin. Ei mitään yhteyttä minkään hiihtokeskuksen toimintaan tai yritykseen.</p>
-                        <p>Yhteydet soittamalla tai tekstaamalla 358400992040 ja kyllä. siinä on maakoodi mukana... Ei spostiosoitetta, koska spam sucks.</p>
-                        <p>Contact me by dialing or texting 358400992040 and yes it does include a three digit country code... No electronic mail address here as I do not want spam.</p>
-                        <p>Tech stack notes: OpenShift, AWS, Node.JS, MongoDB, Mongoose, Angular, REST/JSON API's jne. cool stuff.</p>
+                        <p>Yhteydet soittamalla tai tekstaamalla 358400992040maakoodimukana. Ei spostiosoitetta koska spam sucks.</p>
+                        <p>Contact me by dialing or texting 358400992040threedigitcountrycodeincluded. No electronic mail address here as I do not want spam.</p>
+                        <p>Tech stack notes: OpenShift, Jenkins, AWS, Node.JS, MongoDB, Mongoose, Angular, REST/JSON API's etc. all cool stuff.</p>
                 </div>
 
 		</div>

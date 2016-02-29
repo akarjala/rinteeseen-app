@@ -52,6 +52,10 @@ angular.module('reviewController', [])
             };
         };
 
+		$scope.stateChanged = function() {
+				console.log('CHanged!');
+		};
+
 
 
         }]);

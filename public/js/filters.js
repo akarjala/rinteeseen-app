@@ -40,12 +40,21 @@ var myfilter = angular.module('rinteeseenFilters', [])
           };
         });
 
+            function addZero(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                };
+                return i;
+            };
+
+
         myfilter.filter('extractTimeFromDate', function() {
-          return function(input) {
-            var date = new Date(input);
-            var output = date.toLocaleTimeString(); 
-            return output;
-          };
+			return function(input) {
+				var date = new Date(input);
+            	var h = addZero(date.getHours()); var m = addZero(date.getMinutes());
+				var hourmin = h + ':' + m;
+				return hourmin;
+          	};
         });
 
         myfilter.filter('reviewSummaryFormatter', function() {
