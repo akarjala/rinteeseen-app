@@ -64,16 +64,36 @@ var myfilter = angular.module('rinteeseenFilters', [])
             var output = [];
 
             angular.forEach(input, function(review) {
-              var today = new Date();
-	      var date = new Date(review.date);
-	      if (today.toDateString() === date.toDateString()) {
-	      	// Review date is today, push the review object to return array.
-	        output.push(review);
-	      };
-	    });
+              	var today = new Date();
+	      		var date = new Date(review.date);
+	      		if (today.toDateString() === date.toDateString()) {
+	      			// Review date is today, push the review object to return array.
+	        		output.push(review);
+	      		};
+	    	});
             return output;
           };
         });
+
+		myfilter.filter('reviewsTodayNotEmpty', function() {
+         return function(input) {
+            var output = [];
+
+            angular.forEach(input, function(review) {
+                var today = new Date();
+                var date = new Date(review.date);
+                if (today.toDateString() === date.toDateString()) {
+					if (review.comment != '' && review.comment != undefined) {
+                    	// Review date is today, push the review object to return array.
+                    	output.push(review);
+					};
+                };  
+            });
+            return output;
+          };
+        });
+
+
 
         myfilter.filter('reviewAverageToday', function() {
           return function(input) {

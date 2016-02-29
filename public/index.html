@@ -155,7 +155,7 @@ Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rintee
 	  <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="SmileysAverage">
 Kommentteja tänään: 
 
-<span ng-repeat="review in reviews | reviewsToday | filter:{piste: piste._id} | limitTo: '-5' | orderBy: '-date'"> 
+<span ng-repeat="review in reviews | reviewsTodayNotEmpty | filter:{piste: piste._id} | limitTo: '-5' | orderBy: '-date'"> 
 
   <b>{{review.date | extractTimeFromDate}}:</b> "{{review.comment}}"
 </span>
