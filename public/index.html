@@ -120,7 +120,7 @@
 		</p>
 
 
-		<div class="panel panel-default">
+		<div class="panel panel-default" ng-cloak>
 			<div class="panel-body">
 				<div class="text-info">
 <b><font size="+3">{{areaFilter}}</font></b><br>Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilter} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
@@ -130,7 +130,7 @@ Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rintee
 			</div>
 
 
-<div class="container">
+<div class="container" ng-cloak>
 
    <!-- LOOP OVER THE ITEMS IN $scope.pistes -->
    <!-- piste in pistes -->

@@ -27,6 +27,16 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 	process.env.OPENSHIFT_APP_NAME;
 };
 
+if(process.env.MONGODB_DB_PASSWORD){
+    connection_string = "mongodb://" +
+    process.env.MONGODB_DB_USERNAME + ":" +
+    process.env.MONGODB_DB_PASSWORD + "@" +
+    process.env.MONGODB_DB_HOST + ':' +
+    process.env.MONGODB_DB_PORT + '/' +
+    "sampledb"
+};
+
+
 console.log('Connecting to Mongodb '+connection_string);
 
 mongoose.connect(connection_string); 	// Connect to mongodb

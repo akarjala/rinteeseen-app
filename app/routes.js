@@ -3,10 +3,11 @@
 
 var Piste = require('./models/piste');
 var Review = require('./models/review');
+var Weather = require('./models/weather');
 var Updatepistedata = require('./models/updatepistedata');
 var Updatepistedataconfig_levi = require('../config/pistedata_levi'); 
 var Updatepistedataconfig_yllas = require('../config/pistedata_yllas');
-
+var WeatherConfig = require('../config/weatherconfig');
 
 function getPistes(res) {
   Piste.find().sort({name: -1}).exec( function (err, pistes) {
@@ -16,6 +17,7 @@ function getPistes(res) {
     res.json(pistes); //return all pistes in JSON format
   });
 };
+
 
 function getReviews(res) {
 	Review.find( function (err, reviews) {
@@ -169,6 +171,15 @@ module.exports = function (app) {
           getReviews(res);
         });
       });
+
+
+    app.get('/api/weather', function(req, res, next) {
+        Weather.get(WeatherConfig,
+        function(err, result) { 
+          if(err) { return next(err); }
+          res.json(result);
+        });
+    });
 
 
 
