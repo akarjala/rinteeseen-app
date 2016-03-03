@@ -2,23 +2,27 @@
 var express = require('express');
 var app = express(); 						// create our app w/ express
 var mongoose = require('mongoose'); 				// mongoose for mongodb
-// For development.
-//var port = process.env.PORT || 8080; 				// set the port
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
 
 // configuration ===============================================================
-//provide a sensible default for local development
-
-// default to a 'localhost' configuration:
+//provide a sensible default for local developmenti
 var connection_string = 'mongodb://127.0.0.1:27017/rinteeseenapp';
 
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+
+// default to a 'localhost' dev configuration:
+var connection_string = 'mongodb://127.0.0.1:27017/rinteeseenapp';
+
+// Support Openshift environments
 // if OPENSHIFT env variables are present, use the available connection info so that we can connect to openshift mongo instance.
+// This works normally fine if running in one node+mongodb pod.
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+	console.log('Using openshift_mongodb_db env vars');
 	connection_string = "mongodb://" + 
 	process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
 	process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
@@ -27,13 +31,19 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 	process.env.OPENSHIFT_APP_NAME;
 };
 
+// Connecting to another mongodb pod based on the OpenShift env vars.
 if(process.env.MONGODB_DB_PASSWORD){
-    connection_string = "mongodb://" +
-    process.env.MONGODB_DB_USERNAME + ":" +
-    process.env.MONGODB_DB_PASSWORD + "@" +
-    process.env.MONGODB_DB_HOST + ':' +
-    process.env.MONGODB_DB_PORT + '/' +
-    "sampledb"
+	console.log('Using mongodb_db env vars');
+	connection_string = "mongodb://" +
+	process.env.MONGODB_DB_USERNAME + ":" +
+	process.env.MONGODB_DB_PASSWORD + "@" +
+	process.env.MONGODB_DB_HOST + ':' +
+	process.env.MONGODB_DB_PORT + '/' +
+	process.env.MONGODB_DB_DBNAME
+};
+
+if (OPENSHIFT_NODEJS_IP) {
+	console.log('Using openshift_nodejs_ip env var: ' + OPENSHIFT_NODEJS_IP);
 };
 
 
