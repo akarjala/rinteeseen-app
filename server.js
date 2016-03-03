@@ -24,7 +24,7 @@ var connection_string = 'mongodb://127.0.0.1:27017/rinteeseenapp';
 // if OPENSHIFT env variables are present, use the available connection info so that we can connect to openshift mongo instance.
 // This works normally fine if running in one node+mongodb pod.
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-	console.log('Using openshift_mongodb_db env vars');
+	console.log('Using openshift_mongodb_db env vars.');
 	connection_string = "mongodb://" + 
 	process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
 	process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
@@ -35,7 +35,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 
 // Connecting to another mongodb pod based on the OpenShift env vars.
 if(process.env.MONGODB_DB_PASSWORD){
-	console.log('Using mongodb_db env vars');
+	console.log('Using mongodb_db env vars.');
 	connection_string = "mongodb://" +
 	process.env.MONGODB_DB_USERNAME + ":" +
 	process.env.MONGODB_DB_PASSWORD + "@" +
