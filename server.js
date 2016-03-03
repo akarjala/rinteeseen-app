@@ -4,6 +4,8 @@ var app = express(); 						// create our app w/ express
 var mongoose = require('mongoose'); 				// mongoose for mongodb
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
+// Hostname to send HTTP GET to my own APIs
+var API_hostname = 'localhost';
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -44,11 +46,12 @@ if(process.env.MONGODB_DB_PASSWORD){
 
 if (OPENSHIFT_NODEJS_IP) {
 	console.log('Using openshift_nodejs_ip env var: ' + OPENSHIFT_NODEJS_IP);
+} else {
+	console.log('Instead of openshift_nodejs_ip defaulting to 0.0.0.0');
 };
 
-
+// Connect to DB.
 console.log('Connecting to Mongodb '+connection_string);
-
 mongoose.connect(connection_string); 	// Connect to mongodb
 
 
@@ -74,7 +77,7 @@ setInterval(function() {
 	var http = require('http');
 
 	var options = {
-		host: server_ip_address,
+		host: API_hostname,
 		path: '/api/updatepistedata_levi',
 	    port: port
 	};
@@ -104,7 +107,7 @@ setInterval(function() {
     var http = require('http');
 
     var options = {
-        host: server_ip_address,
+        host: API_hostname,
         path: '/api/updatepistedata_yllas',
         port: port
     };
