@@ -44,8 +44,8 @@ if(process.env.MONGODB_DB_PASSWORD){
 	process.env.MONGODB_DB_DBNAME
 };
 
-if (OPENSHIFT_NODEJS_IP) {
-	console.log('Using openshift_nodejs_ip env var: ' + OPENSHIFT_NODEJS_IP);
+if (process.env.OPENSHIFT_NODEJS_IP != undefined) {
+	console.log('Using openshift_nodejs_ip env var: ' + process.env.OPENSHIFT_NODEJS_IP);
 } else {
 	console.log('Instead of openshift_nodejs_ip defaulting to 0.0.0.0');
 };
