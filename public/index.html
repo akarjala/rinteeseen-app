@@ -14,10 +14,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
 
-       <title>Rinteeseen.com. Rinteiden tiedot reaaliaikaisesti, rinteiden aukiolojat, hissit, arvostelut jne. Levi ja Ylläs.
+       <title>Rinteeseen.com. Rinteiden tiedot reaaliaikaisesti, rinteiden aukiolojat, hissit, arvostelut jne. Levi, Ylläs ja Ruka.
 	           </title>
 
-	<meta name="description" content="Reaaliaikaiset rinnetiedot aukiolotietoineen, hissit, arvostelut. Arvostele rinteitä. Levi, Ylläs ja lisää tulossa. Katso aukioloajat, vaikeustasot, pituudet ja arvostele rinteen kunto helposti klikkaamalla hymiötä.">
+	<meta name="description" content="Reaaliaikaiset rinnetiedot aukiolotietoineen, hissit, arvostelut. Arvostele rinteitä. Levi, Ylläs, Ruka ja lisää tulossa. Katso aukioloajat, vaikeustasot, pituudet ja arvostele rinteen kunto helposti klikkaamalla hymiötä.">
 
 	<!-- SCROLLS -->
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"><!-- load bootstrap -->
@@ -120,8 +120,8 @@ Rinteet
 
 
 		<div id="about" class="well text-center">
-			<p>Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Arvion yhteyteeen voi kirjoittaa lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
-    	<p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista. Rinne- ja säätiedot ovat siis jatkuvasti ajan tasalla!</p>
+				<font size="-2"><p>Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Arvion yhteyteeen voi kirjoittaa lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
+						<p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaisesti hiihtokeskuksilta. Rinne- ja säätiedot ovat siis jatkuvasti ajan tasalla!</p></font>
 			<div class="btn-group" ng-cloak>
 				<button ng-repeat="area in areas" ng-click="areaSelected(area.area)" ng-class="{active: area.area === areaFilterArea}" class="btn btn-success">{{area.displayName}}</button>
     		</div>
@@ -163,6 +163,7 @@ Rinteet
 				</div>
 			</li>
 <br>Rinteiden tiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilterDisplayName} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
+			<div ng-show="areaFilterArea==='ruka'"><br><b>HUOM: Ruka - vasta säätiedot saatavissa. Rinteet tulossa myöhemmin.</b></div>
 		</div>
 	</div>
 	
@@ -237,7 +238,7 @@ Virhe: Valitse hymiö ennen lähettämistä!
 
 					<div class="list-group" ng-controller="weatherController">
 <a href="#" class="list-group-item active">
-<h5 class="list-group-item-heading">Sää seuraavat 8 tuntia</h4>
+		<h5 class="list-group-item-heading">Sää seuraavat 8 tuntia, {{areaFilterDisplayName}}</h4>
 </a>
 						<div class="panel panel-default">
                     		<div class="panel-body">
@@ -283,7 +284,9 @@ Virhe: Valitse hymiö ennen lähettämistä!
 				<uib-tab index="2" heading="Muuta/linkit">
 
 <!-- START OF MISC TAB -->
-Linkkejä:<br> <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a> | <a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a>
+Linkkejä:<br> <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a><br>
+<a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a><br>
+<a href="http://www.panoraama.com/ruka/rinnekartta/">Rinnetiedot Ruka.fi</a>
 <br>
 <!-- END OF MISC TAB -->
 

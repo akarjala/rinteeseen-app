@@ -5,7 +5,7 @@ var mongoose = require('mongoose'); 				// mongoose for mongodb
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
 // Hostname to send HTTP GET to my own APIs
-var API_hostname = 'localhost';
+var API_hostname = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');

@@ -5,7 +5,7 @@ var XMLparseString = require('xml2js').Parser({explicitArray : false});
 //var moment = require('moment');
 var moment = require('moment-timezone');
 
-exports.get = function(options, onResult)
+exports.get = function(options, targetArea, onResult)
 {
 	console.log("Requesting HTTP GET: " + options.host + '/' + options.path);
 	var prot = options.port == 443 ? https : http;
@@ -28,7 +28,7 @@ exports.get = function(options, onResult)
 			var resultObjects = [];
 			var tempfound = false;
 			var hour = moment();
-			for (i=0; resultObjects.length<16; i++) {
+			for (i=0; resultObjects.length<8; i++) {
 				if (result.weatherdata.product.time[i].location.temperature !== undefined) {
 					   	if (result.weatherdata.product.time[i].location.temperature.$.value !== undefined) {
 							temp = result.weatherdata.product.time[i].location.temperature.$.value;
@@ -50,23 +50,11 @@ exports.get = function(options, onResult)
 						if (temp !== undefined && symbolname !== undefined && symbolno !== undefined && windspeed !== undefined) {
 						resultObjects.push ( {
 							country : 'FIN',
-							area : 'Levi',
+							area : targetArea,
 							temp: temp,
 							symbolname: symbolname,
 							symbolno: symbolno,
 							windspeed: windspeed,
-							windspeedDirection: windspeedDirection,
-							rainMin: rainMin,
-							rainMax: rainMax,
-							hour: hour.format('HH')
-						},
-						{
-                			country : 'FIN',
-                			area : 'Ylläs',
-                			temp: temp,
-                			symbolname: symbolname,
-                			symbolno: symbolno,
-               				windspeed: windspeed,
 							windspeedDirection: windspeedDirection,
 							rainMin: rainMin,
 							rainMax: rainMax,

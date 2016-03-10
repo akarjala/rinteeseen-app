@@ -10,14 +10,8 @@ angular.module('updateControllerModule', [])
         // data has 1 piste, the latest one updated.
         $scope.lastUpdatedPiste = data;
       });
-
     
 
-  /* Could be some other functions as well
-   *
-   * $scope.checkupdatestatus = function() {
-   *  do stuff...$scope.updatestatusResults = ....
-   *  } */ 
 
   }]);
 

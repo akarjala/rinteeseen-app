@@ -174,11 +174,26 @@ module.exports = function (app) {
 
 
     app.get('/api/weather', function(req, res, next) {
-        Weather.get(WeatherConfig,
-        function(err, result) { 
-          if(err) { return next(err); }
-          res.json(result);
+        
+		// WeatherConfig is an array, iterate through requesting weather for each area
+		var weatherResults = [];
+		Weather.get(WeatherConfig[0], 'Levi', function(err, result) {
+			if(err) { return next(err); }
+			weatherResults = weatherResults.concat(result);
+		});
+
+		Weather.get(WeatherConfig[1], 'Ylläs', function(err, result) {
+            if(err) { return next(err); }
+            weatherResults = weatherResults.concat(result);
         });
+
+		Weather.get(WeatherConfig[2], 'Ruka', function(err, result) {
+			if(err) { return next(err); }
+			weatherResults = weatherResults.concat(result);
+			res.json(weatherResults);
+		});
+
+        
     });
 
 

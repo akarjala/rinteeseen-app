@@ -36,8 +36,13 @@ angular.module('pisteController', [])
 		},
 		{
 			displayName: 'Ylläs',
-			area: 'yllas',
+			area: 'yllas'
+		},
+		{
+			displayName: 'Ruka',
+			area: 'ruka'
 		}];
+
 
 		$scope.areaSelected = function (areaName) {
         	console.log("Area selected:" + areaName);
