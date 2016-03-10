@@ -30,28 +30,34 @@
 		#vendorpisteinfo		{ font-size: 70%; }
 		.Smileys				{ width: 25px; height: 25px; }
 		.SmileysAverage			{ width: 35px; height: 35px; }
+		.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+        .tab-pane               { margin: 5px 5px; }
+		.tab-content			{ border-left: 1px solid #ddd; border-right: 1px solid #ddd; padding: 2px; }
 
 
 	</style>
 
 	<!-- SPELLS -->
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script><!-- load angular -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script><!-- load angular -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment-with-locales.js"></script><!-- moment.js for handling date/time-->
 	<script src="js/controllers/pisteController.js"></script> <!-- load up our controllers -->
 	<script src="js/filters.js"></script><!-- load our filters -->
 	<script src="js/controllers/ReviewController.js"></script>
-	<script src="js/services/pisteService.js"></script> <!-- load our pistes service -->
-	<script src="js/services/reviewService.js"></script><!-- load our review service -->
-	<script src="js/controllers/PistesDropDownController.js"></script><!-- load our navbar controller -->
+    <script src="js/controllers/WeatherController.js"></script>
+	<script src="js/services/pisteService.js"></script> <!-- load our services -->
+	<script src="js/services/reviewService.js"></script>
+	<script src="js/services/weatherService.js"></script>
+	<script src="js/controllers/PistesDropDownController.js"></script>
+	<script src="js/controllers/TabsController.js"></script>
 	<script src="js/core.js"></script> <!-- load our main application -->
+
 
 
 
 </head>
 <!-- SET THE CONTROLLER -->
 <body ng-controller="mainController">
-
 
 
       <!-- Static top navbar -->
@@ -78,7 +84,7 @@
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-					<li ng-repeat="area in areas"><a href="#" ng-click="areaSelected(area.name)">{{area.name}}</a></li>
+					<li ng-repeat="area in areas"><a href="#" ng-click="areaSelected(area.area)">{{area.displayName}}</a></li>
 			</ul>
                 </div>
 
@@ -86,19 +92,20 @@
               </li>
 
 
-              <li class="dropdown">
-	      <div ng-controller="PistesDropDownController">
-                <div class="dropdown" style="padding-top: 10px; padding-left: 5px">
-                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Rinteet
-                    <span class="caret"></span>
-                  </button>
-				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						  <li ng-repeat="piste in pistes | orderBy: 'piste.name' | filter: {area: areaFilter}"><a href="#{{piste._id}}" ng-click="dropboxitemselected(piste.name)"><img ng-src="./images/{{piste.status | pisteStatusImageFormatter}}" width="15px"> {{piste.name}} ({{piste.status | pisteStatusFormatter}})</a></li>
-                  </ul>
-                </div>
-              </div>
+			<li class="dropdown">
+				<div ng-controller="PistesDropDownController">
+                	<div class="dropdown" style="padding-top: 10px; padding-left: 5px">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+Rinteet
+<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li ng-repeat="piste in pistes | orderBy: 'piste.name' | filter: {area: areaFilterDisplayName}"><a href="#{{piste._id}}" ng-click="dropboxitemselected(piste.name)"><img ng-src="./images/{{piste.status | pisteStatusImageFormatter}}" width="15px"> {{piste.name}} ({{piste.status | pisteStatusFormatter}})</a></li>
+						</ul>
+					</div>
+				</div>
               </li>
+
 
             </ul>
           </div><!--/.nav-collapse -->
@@ -106,101 +113,188 @@
       </div>
 
 
-<div class="container" ng-controller="reviewController">
+
+<div class="container">
 
 	<div class="wrap">
 
+
 		<div id="about" class="well text-center">
-			<p>Etsitkö täydellistä rinnettä? Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Voit myös kirjoittaa arviosi yhteyteen lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
-    	<p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista. Tieto on siis jatkuvasti ajan tasalla ja voit seurata palvelusta vaikkapa vain aukiolotietoja.</p>
+			<p>Mihin rinteeseen kannattaa juuri nyt suunnata? Vinkkaa kaverille millaiset olosuhteet missäkin rinteessä on klikkaamalla sopivaksi katsomaasi hymiötä rinteen tai hissin kohdalla. Arvion yhteyteeen voi kirjoittaa lyhyen kommentin. Keskiarvo päivittyy jatkuvasti klikkausten mukaisesti.</p>
+    	<p>Rinteiden perustiedot ja aukiolotieto noudetaan reaaliaikaiseti hiihtokeskuksen omista palveluista. Rinne- ja säätiedot ovat siis jatkuvasti ajan tasalla!</p>
+			<div class="btn-group" ng-cloak>
+				<button ng-repeat="area in areas" ng-click="areaSelected(area.area)" ng-class="{active: area.area === areaFilterArea}" class="btn btn-success">{{area.displayName}}</button>
+    		</div>
 		</div>
-  
+
 		<p class="text-center" ng-show="loading">
 		<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
 
 
-		<div class="panel panel-default" ng-cloak>
-			<div class="panel-body">
-				<div class="text-info">
-<b><font size="+3">{{areaFilter}}</font></b><br>Rinteiden perustiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilter} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
-    </div>
-Linkit: <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a> | <a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a>
+<!-- START OF TABS! -->
+
+		<div ng-controller="reviewController">
+ 			<uib-tabset active="active">
+				<uib-tab index="0" heading="Rinteet & hissit">
+
+<!-- START OF PISTE TAB -->
+
+
+
+<div class="panel panel-default" ng-cloak>
+	
+	<div class="panel-body">
+			
+		<div class="text-info">
+<b><font size="+3">{{areaFilterDisplayName}}</font></b>
+
+			<li class="dropdown" style="display:inline-block; vertical-align: top;">
+				<div ng-controller="PistesDropDownController">
+					<div class="dropdown" style="padding-top: 0px; padding-left: 5px">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+Rinteet
+<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li ng-repeat="piste in pistes | orderBy: 'piste.name' | filter: {area: areaFilterDisplayName}"><a href="#{{piste._id}}" ng-click="dropboxitemselected(piste.name)"><img ng-src="./images/{{piste.status | pisteStatusImageFormatter}}" width="15px"> {{piste.name}} ({{piste.status | pisteStatusFormatter}})</a></li>
+						</ul>
+					</div>
 				</div>
-			</div>
+			</li>
+<br>Rinteiden tiedot päivitetty viimeksi <b>{{ (pistes | orderBy: '-date' | limitTo: 1)[0].date | updatedDateDiff }}</b> minuuttia sitten hiihtokeskusten palveluista. Viimeisin arvio lisätty: <b>{{ (reviews | filter: {area: areaFilterDisplayName} | orderBy: '-date' | limitTo: 1)[0].date | dateFormatter | reviewSummaryFormatter}}</b>.
+		</div>
+	</div>
+	
 
+	<div class="container" ng-cloak>
 
-<div class="container" ng-cloak>
-
-   <!-- LOOP OVER THE ITEMS IN $scope.pistes -->
-   <!-- piste in pistes -->
-   <!-- piste.name.... -->
-   <!-- example button: ng-click="deleteTodo(todo._id) -->
-
-
-<!-- <div class="item" ng-repeat="piste in pistes track by $index">
--->
-<div class="item" ng-repeat="piste in pistes | filter: {area: areaFilter} track by $index | filter: {area: areaFilter}">
-
+	<!-- LOOP OVER THE ITEMS IN $scope.pistes -->
+	<!-- piste in pistes -->
+	<!-- piste.name.... -->
+	<!-- example button: ng-click="deleteTodo(todo._id) -->
+		<div class="item" ng-repeat="piste in pistes | filter: {area: areaFilterDisplayName} track by $index ">
 
 <!-- START LIST ITEM -->
-    {{totalReviewsByPisteToday(reviews, piste._id)}}
-    <div id="{{piste._id}}" class="list-group">
-      <a href="#" class="list-group-item active" ng-if="piste.status!=='94'">
-			  <h4 class="list-group-item-heading"><img ng-src="images/ok.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{ piste.status }})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. Lisätiedot: "{{piste.extrainfo}}". </font></h4><span class="badge" style="background-color: #999999; color: white"> Arvioita tänään: <b>{{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </b></span>
-      </a>
-      <a href="#" class="list-group-item" style="background-color: #992600; color:" ng-if="piste.status=='94'">
-	<h4 class="list-group-item-heading" style="color: white"><img ng-src="images/stop.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{piste.status}})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4><span class="badge" style="padding: 3px 3px;" > Arvioita tänään: {{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </span>
-      </a>
+			<div id="{{piste._id}}" class="list-group">
+<a href="#" class="list-group-item active" ng-if="piste.status!=='94'">
+<h4 class="list-group-item-heading"><img ng-src="images/ok.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{ piste.status }})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. Lisätiedot: "{{piste.extrainfo}}". </font></h4>
+<span class="badge" style="background-color: #999999; color: white"> Arvioita tänään: <b>{{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </b></span>
+</a>
+<a href="#" class="list-group-item" style="background-color: #992600; color:" ng-if="piste.status=='94'">
+<h4 class="list-group-item-heading" style="color: white"><img ng-src="images/stop.png"> <big>{{ piste.name }}</big>. <font size="-1px">Status: "{{piste.status | pisteStatusFormatter}} ({{piste.status}})". Vaikeustaso "{{ piste.difficulty}}". Pituus: {{ piste.length }}m. </font></h4>
+<span class="badge" style="padding: 3px 3px;" > Arvioita tänään: {{(reviews | filter: {piste: piste._id} | reviewsToday).length}} ({{(reviews | filter: {piste: piste._id} ).length}}) </span>
+</a>
       
-      <div class="panel panel-default">
-
-	<div class="panel-body">
-	  Arvioiden keskiarvo tänään: 
-	  <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="SmileysAverage">
-Kommentteja tänään: 
-
-<span ng-repeat="review in reviews | reviewsTodayNotEmpty | filter:{piste: piste._id} | limitTo: '-5' | orderBy: '-date'"> 
-
-  <b>{{review.date | extractTimeFromDate}}:</b> "{{review.comment}}"
-</span>
-	</div> 
-		<form class="form-inline" role="form">
-		<div class="form-group">
-			<label class="sr-only" form="reviewForm">{{piste._id}}</label>
-
-			<div class="panel-footer">
-				<div class="btn-group" style="padding-top: 6px;" role="group" aria-label="">
+				<div class="panel panel-default">
+					<div class="panel-body">
+Arvioiden keskiarvo tänään: <img ng-src="images/{{reviews | filter:{piste: piste._id} | reviewAverageToday }}.png" class="SmileysAverage">
+Kommentteja tänään: <span ng-repeat="review in reviews | reviewsTodayNotEmpty | filter:{piste: piste._id} | limitTo: '-5' | orderBy: '-date'"> <b>{{review.date | extractTimeFromDate}}:</b> "{{review.comment}}"</span>
+					</div> 
+		
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<label class="sr-only" form="reviewForm">{{piste._id}}</label>
+							<div class="panel-footer">
+								<div class="btn-group" style="padding-top: 6px;" role="group" aria-label="">
 <label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'5'" uncheckable><img src="images/5.png" class="Smileys"></label>
 <label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'4'" uncheckable><img src="images/4.png" class="Smileys"></label>
 <label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'3'" uncheckable><img src="images/3.png" class="Smileys"></label>
 <label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'2'" uncheckable><img src="images/2.png" class="Smileys"></label>
 <label class="btn btn-default" ng-model="pistes[$index].reviewbutton" uib-btn-radio="'1'" uncheckable><img src="images/1.png" class="Smileys"></label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-8">
+									<div class="input-group">
+										<span class="input-group-btn"><button class="btn btn-primary" type="submit" ng-click="createReview(areaFilterDisplayName, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Valitse hymiö ja lähetä!</button></span>
+										<input type="text" name="{{piste._id}}" class="form-control input text-center" placeholder="Kommentoi tähän!" ng-model="pistes[$index].comment" maxlength="50">
+									</div><!-- /input-group -->
+									<div class="alert alert-danger" role="alert" ng-show="submitError !== ''">
+Virhe: Valitse hymiö ennen lähettämistä!
+									</div> 
+								</div><!-- /.col-md-8 -->
+              				</div> <! -- /.row -->
+						</div>
+					</form>
 				</div>
-          </div>
+			</div>
+		</div> <! -- closing pistes item repeat -->
+	</div> <!-- closing the container -->
+	
+	<!-- END LIST ITEM -->
+
+</div>
 
 
-        <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
 
-              <div class="row">
-                <div class="col-md-8">
-                  <div class="input-group">
-                    <span class="input-group-btn">
-						<button class="btn btn-primary" type="submit" ng-click="createReview(areaFilter, piste._id, pistes[$index].reviewbutton, pistes[$index].comment)">Valitse hymiö ja lähetä!				</button>
-                    </span>
-		    <input type="text" name="{{piste._id}}" class="form-control input text-center" placeholder="Kommentoi tähän!" ng-model="pistes[$index].comment" maxlength="50">
-                  </div><!-- /input-group -->
-				  <div class="alert alert-danger" role="alert" ng-show="submitError !== ''">Virhe: Valitse hymiö ennen lähettämistä!</div> 
-                </div><!-- /.col-lg-6 -->
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-  </div>
+<!-- END OF PISTE TAB -->
+				</uib-tab>
+			
 
-  <!-- END LIST ITEM -->
-</div class="item"> <!-- ng-repeat -->
+				<uib-tab index="1" heading="Sää">
+<!-- START OF WEATHER TAB -->
+
+					<div class="list-group" ng-controller="weatherController">
+<a href="#" class="list-group-item active">
+<h5 class="list-group-item-heading">Sää seuraavat 8 tuntia</h4>
+</a>
+						<div class="panel panel-default">
+                    		<div class="panel-body">
+								<table class="table table-striped table-condensed">
+									<thead>
+										<tr>
+											<th>Aika</th>
+											<th>Lämpötila</th>
+											<th>Tuuli</th>
+											<th>Sademäärä</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="weather in weathers | filter: {area: areaFilterDisplayName}">
+											<td><span class="glyphicon glyphicon-time" aria-hidden="true"></span>{{weather.hour}}</td>
+											<td><b>{{weather.temp}}</b> &deg;C</td>
+											<td><b>{{weather.windspeed}}</b>m/s {{weather.windspeedDirection}}</td>
+											<td><b>{{weather.rainMin}} - {{weather.rainMax}} mm</td>
+											<td style="padding: 0px"><img ng-src="http://api.met.no/weatherapi/weathericon/1.1/?symbol={{weather.symbolno}};content_type=image/png"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="list-group" ng-controller="weatherController">
+<a href="#" class="list-group-item active">
+<h5 class="list-group-item-heading">Huomenna</h4>
+</a>
+						<div class="panel panel-default">
+                    		<div class="panel-body">
+								Huomisen sääennuste. Tulossa kunhan ehdin koodailla taas :)
+							</div>
+						</div>
+					</div>
+<em>Norwegian Meteorological Institute</em>.<br>
+
+<!-- END OF WEATHER TAB -->
+    			</uib-tab>
+				<uib-tab index="2" heading="Muuta/linkit">
+
+<!-- START OF MISC TAB -->
+Linkkejä:<br> <a href="http://www.levi.fi/fi/viihdy-levilla/laskettelu-lautailu/rinteet-reitit.html">Rinnetiedot Levi.fi</a> | <a href="http://www.yllas.fi/tekemista/laskettelu/rinne-ja-hissitiedot-seka-aukioloajat.html">Rinnetiedot Yllas.fi</a>
+<br>
+<!-- END OF MISC TAB -->
+
+				</uib-tab>
+			
+				
+			</uib-tabset>
+		</div>
+
+
+
 
 
 
@@ -208,9 +302,9 @@ Kommentteja tänään:
 
                 <div id="contact" class="well text-center text-muted">
                         <p>Rinteeseen by Aki. Tein tämän koska 1. tarvitsin tällaista ja uskon, että joku muukin sekä 2. koska pystyin. Ei mitään yhteyttä minkään hiihtokeskuksen toimintaan tai yritykseen.</p>
-                        <p>Yhteydet soittamalla tai tekstaamalla 358400992040maakoodimukana. Ei spostiosoitetta koska spam sucks.</p>
-                        <p>Contact me by dialing or texting 358400992040threedigitcountrycodeincluded. No electronic mail address here as I do not want spam.</p>
-                        <p>Tech stack notes: OpenShift, Jenkins, AWS, Node.JS, MongoDB, Mongoose, Angular, REST/JSON API's etc. all cool stuff.</p>
+                        <p>Yhteydet soittamalla tai tekstaamalla 358400992040 maakoodimukana. Ei spostiosoitetta koska spam sucks.</p>
+                        <p>Contact me by dialing or texting 358400992040 threedigitcountrycodeincluded. No electronic mail address here as I do not want spam.</p>
+                        <p>Tech stack notes: OpenShift, Jenkins, AWS, Node.JS, MongoDB, Mongoose, Angular, REST/JSON API's etc. all cool stuff :).</p>
                 </div>
 
 		</div>
@@ -230,8 +324,8 @@ Kommentteja tänään:
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="bootstrap-angular/ui-bootstrap-1.1.2.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="bootstrap-angular/ui-bootstrap-tpls-1.2.4.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 

@@ -1,5 +1,4 @@
 'use strict';
 
-angular.module('rinteeseenApp', ['pisteController', 'reviewController',  'pisteServiceModule', 'reviewServiceModule', 'rinteeseenFilters', 'ui.bootstrap', 'PistesDropDownControllerModule' ]);
+angular.module('rinteeseenApp', ['ui.bootstrap', 'pisteController', 'reviewController', 'weatherController',  'pisteServiceModule', 'reviewServiceModule', 'weatherServiceModule', 'rinteeseenFilters', 'PistesDropDownControllerModule', 'TabsControllerModule' ]);
 
-angular.module('myModule', ['ui.bootstrap']);

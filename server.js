@@ -13,8 +13,6 @@ var methodOverride = require('method-override');
 
 // configuration ===============================================================
 //provide a sensible default for local developmenti
-var connection_string = 'mongodb://127.0.0.1:27017/rinteeseenapp';
-
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 
 // default to a 'localhost' dev configuration:
@@ -96,7 +94,7 @@ setInterval(function() {
   		});
 	};
 	http.request(options, callback).end();
-}, 300000);
+}, 390000);
 
 
 var schedulerCount_yllas = 0;
@@ -126,7 +124,7 @@ setInterval(function() {
         });
     };
     http.request(options, callback).end();
-}, 250000);
+}, 450000);
 
 
 

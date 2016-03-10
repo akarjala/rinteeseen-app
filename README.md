@@ -1,4 +1,4 @@
 ## Synopsis
 
-Rinteeseen 0.0.1
+Rinteeseen 0.0.1.
 

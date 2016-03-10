@@ -3,11 +3,14 @@ angular.module('pisteController', [])
 
 		// inject the Piste service factory into our controller
         .controller('mainController', ['$scope','$http','Pistes', function($scope, $http, Pistes) {
-	        $scope.reviewForm = {};
+	        
+			$scope.reviewForm = {};
 			$scope.submitError = '';
-			$scope.areaFilter = 'Levi';
+			$scope.areaFilterDisplayName = 'Levi';
+			$scope.areaFilterArea = 'levi';
 			
-		$scope.loading = true;
+			
+			$scope.loading = true;
 
 		// GET =====================================================================
 		// when landing on the page, get all pistes and show them
@@ -28,15 +31,22 @@ angular.module('pisteController', [])
 
 
 		$scope.areas = [ {
-        	name: 'Levi'
+        	displayName: 'Levi',
+			area: 'levi'
 		},
 		{
-			name: 'Ylläs'
+			displayName: 'Ylläs',
+			area: 'yllas',
 		}];
 
-		$scope.areaSelected = function ($areaName) {
-        	console.log("Area selected:" + $areaName);
-        	$scope.areaFilter = $areaName;
+		$scope.areaSelected = function (areaName) {
+        	console.log("Area selected:" + areaName);
+        	$scope.areaFilterArea = areaName;
+			for (i=0 ; i<$scope.areas.length; i++) {
+					if ($scope.areas[i].area == areaName) {
+						$scope.areaFilterDisplayName = $scope.areas[i].displayName;
+					};
+			};
 		};
 
 
